@@ -1,0 +1,501 @@
+#uu0 {
+  position:absolute;
+  left:110px;
+  top:39px;
+  width:193px;
+  height:31px;
+  font-family:'微软雅黑 Bold', '微软雅黑';
+  font-weight:700;
+  font-style:normal;
+  color:#3883E5;
+}
+#uu0_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:193px;
+  height:31px;
+}
+#uu1 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:193px;
+  white-space:nowrap;
+}
+#uu2 {
+  position:absolute;
+  left:20px;
+  top:0px;
+  width:68px;
+  height:77px;
+}
+#uu2_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:68px;
+  height:77px;
+}
+#uu3 {
+  position:absolute;
+  left:2px;
+  top:30px;
+  width:64px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu4 {
+  position:absolute;
+  left:0px;
+  top:80px;
+  width:1420px;
+  height:1px;
+}
+#uu4_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:1420px;
+  height:1px;
+}
+#uu5 {
+  position:absolute;
+  left:2px;
+  top:-8px;
+  width:1416px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu6 {
+  position:absolute;
+  left:790px;
+  top:41px;
+  width:576px;
+  height:39px;
+}
+#uu6_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:576px;
+  height:39px;
+}
+#uu7 {
+  position:absolute;
+  left:2px;
+  top:12px;
+  width:572px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu8 {
+  position:absolute;
+  left:832px;
+  top:51px;
+  width:53px;
+  height:19px;
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+}
+#uu8_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:53px;
+  height:19px;
+}
+#uu8_img.mouseOver {
+}
+#uu8.mouseOver {
+}
+#uu9 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:53px;
+  white-space:nowrap;
+}
+#uu10 {
+  position:absolute;
+  left:912px;
+  top:51px;
+  width:66px;
+  height:19px;
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+}
+#uu10_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:66px;
+  height:19px;
+}
+#uu11 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:66px;
+  white-space:nowrap;
+}
+#uu12 {
+  position:absolute;
+  left:978px;
+  top:51px;
+  width:131px;
+  height:19px;
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+}
+#uu12_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:131px;
+  height:19px;
+}
+#uu13 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:131px;
+  white-space:nowrap;
+}
+#uu14 {
+  position:absolute;
+  left:1145px;
+  top:50px;
+  width:66px;
+  height:19px;
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+}
+#uu14_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:66px;
+  height:19px;
+}
+#uu15 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:66px;
+  white-space:nowrap;
+}
+#uu16 {
+  position:absolute;
+  left:1126px;
+  top:51px;
+  width:10px;
+  height:20px;
+}
+#uu16_start {
+  position:absolute;
+  left:-5px;
+  top:0px;
+  width:20px;
+  height:18px;
+}
+#uu16_end {
+  position:absolute;
+  left:-5px;
+  top:3px;
+  width:20px;
+  height:18px;
+}
+#uu16_line {
+  position:absolute;
+  left:5px;
+  top:0px;
+  width:1px;
+  height:20px;
+}
+#uu17 {
+  position:absolute;
+  left:1211px;
+  top:50px;
+  width:115px;
+  height:19px;
+  font-family:'微软雅黑 Regular', '微软雅黑';
+  font-weight:400;
+  font-style:normal;
+}
+#uu17_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:115px;
+  height:19px;
+}
+#uu18 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:115px;
+  white-space:nowrap;
+}
+#uu19 {
+  position:absolute;
+  left:0px;
+  top:983px;
+  width:1420px;
+  height:59px;
+}
+#uu19_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:1420px;
+  height:59px;
+}
+#uu20 {
+  position:absolute;
+  left:2px;
+  top:22px;
+  width:1416px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu21 {
+  position:absolute;
+  left:36px;
+  top:1005px;
+  width:121px;
+  height:28px;
+  color:#FFFFFF;
+}
+#uu21_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:121px;
+  height:28px;
+}
+#uu22 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:121px;
+  white-space:nowrap;
+}
+#uu23 {
+  position:absolute;
+  left:122px;
+  top:1067px;
+  width:121px;
+  height:121px;
+}
+#uu23_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:121px;
+  height:121px;
+}
+#uu24 {
+  position:absolute;
+  left:2px;
+  top:52px;
+  width:117px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu25 {
+  position:absolute;
+  left:306px;
+  top:1052px;
+  width:141px;
+  height:151px;
+}
+#uu25_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:141px;
+  height:151px;
+}
+#uu26 {
+  position:absolute;
+  left:2px;
+  top:68px;
+  width:137px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu27 {
+  position:absolute;
+  left:515px;
+  top:1082px;
+  width:121px;
+  height:91px;
+}
+#uu27_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:121px;
+  height:91px;
+}
+#uu28 {
+  position:absolute;
+  left:2px;
+  top:38px;
+  width:117px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu29 {
+  position:absolute;
+  left:685px;
+  top:1067px;
+  width:121px;
+  height:121px;
+}
+#uu29_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:121px;
+  height:121px;
+}
+#uu30 {
+  position:absolute;
+  left:2px;
+  top:52px;
+  width:117px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu31 {
+  position:absolute;
+  left:895px;
+  top:1082px;
+  width:121px;
+  height:91px;
+}
+#uu31_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:121px;
+  height:91px;
+}
+#uu32 {
+  position:absolute;
+  left:2px;
+  top:38px;
+  width:117px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu33 {
+  position:absolute;
+  left:1067px;
+  top:1033px;
+  width:268px;
+  height:189px;
+}
+#uu33_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:268px;
+  height:189px;
+}
+#uu34 {
+  position:absolute;
+  left:2px;
+  top:86px;
+  width:264px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu35 {
+  position:absolute;
+  left:330px;
+  top:1290px;
+  width:723px;
+  height:44px;
+}
+#uu35_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:723px;
+  height:44px;
+}
+#uu36 {
+  position:absolute;
+  left:2px;
+  top:14px;
+  width:719px;
+  visibility:hidden;
+  word-wrap:break-word;
+}
+#uu37 {
+  position:absolute;
+  left:571px;
+  top:1244px;
+  width:229px;
+  height:28px;
+}
+#uu37_img {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:229px;
+  height:28px;
+}
+#uu38 {
+  position:absolute;
+  left:0px;
+  top:0px;
+  width:229px;
+  white-space:nowrap;
+}
+/*==========以下部分是table的===========*/
+
+.u_tr { height:30px;}
+.u_td_1 { text-align:right;}
+.u_td_2 { text-align:left;}
+
+/*==========以下部分是Validform必须的===========*/
+.Validform_checktip{
+	margin-left:8px;
+	line-height:20px;
+	height:20px;
+	overflow:hidden;
+	color:#999;
+	font-size:12px;
+}
+.Validform_right{
+	color:#71b83d;
+	padding-left:20px;
+	background:url(../images/right.png) no-repeat left center;
+}
+.Validform_wrong{
+	color:red;
+	padding-left:20px;
+	white-space:nowrap;
+	background:url(../images/error.png) no-repeat left center;
+}
+.Validform_loading{
+	padding-left:20px;
+	background:url(../images/onLoad.gif) no-repeat left center;
+}
+.Validform_error{
+	background-color:#ffe7e7;
+}
+#Validform_msg{color:#7d8289; font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif; width:280px; -webkit-box-shadow:2px 2px 3px #aaa; -moz-box-shadow:2px 2px 3px #aaa; background:#fff; position:absolute; top:0px; right:50px; z-index:99999; display:none;filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#999999');}
+#Validform_msg .iframe{position:absolute; left:0px; top:-1px; z-index:-1;}
+#Validform_msg .Validform_title{line-height:25px; height:25px; text-align:left; font-weight:bold; padding:0 8px; color:#fff; position:relative; background-color:#000;}
+#Validform_msg a.Validform_close:link,#Validform_msg a.Validform_close:visited{line-height:22px; position:absolute; right:8px; top:0px; color:#fff; text-decoration:none;}
+#Validform_msg a.Validform_close:hover{color:#cc0;}
+#Validform_msg .Validform_info{padding:8px;border:1px solid #000; border-top:none; text-align:left;}

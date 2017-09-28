@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                        http://www.springframework.org/schema/context  
+                        http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                        http://www.springframework.org/schema/mvc  
+                        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                        ">
+
+    <!-- 扫描cn.sirbox包里下的所有class文件，配置注解的类全都装入容器中进行管理 -->
+    <context:component-scan base-package="cn" />
+    <!-- 添加注解驱动 -->
+    <mvc:annotation-driven />
+<!--      配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd
+     <mvc:resources mapping="/images/**" location="/images/" />
+     <mvc:resources mapping="/js/**" location="/js/" />
+     <mvc:resources mapping="/css/**" location="/css/" />
+     <mvc:resources mapping="/plugins/**" location="/plugins/" /> -->
+	<bean id="prop" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+   <!-- 这里是PropertiesFactoryBean类，它也有个locations属性，也是接收一个数组，跟上面一样 -->
+   <property name="locations">
+          <value>classpath:dbconf.properties</value>
+   </property>
+</bean>
+</beans>
