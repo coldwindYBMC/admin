@@ -6,8 +6,10 @@
 <html>
 <head>
 <title>导表选择</title>
+
 <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstray.min.js"></script>
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 </head>
 <body>
@@ -16,7 +18,8 @@
         导入${resource.resource}:<br>
             <c:forEach items="${resource.list}" var="table">
                    <c:if test="${table.isException == 1}" >
-                       导入${table.tableName}表失败!<a onclick="showerror(${table.exception})">错误信息</a><br>
+                       导入${table.tableName}表失败!
+                   <a href="${pageContext.request.contextPath}/errorText.do?error=${table.exception}">显示错误内容</a>
                    </c:if>
                    <c:if test="${table.isException == 0}" >
                        导入${table.tableName}表成功!&nbsp插入${table.insertNum}条!&nbsp更新${table.updateNum}条!&nbsp<br>
@@ -59,6 +62,14 @@
             </c:forEach>
         </c:forEach>
 </body>
+
+<input type="button" id="butn" value="显示/隐藏" onclick="toggle('div1')" />
+<center>
+<div id="div1"></div></center>
+ document.write()
+</body>
+
+
 <script type="text/javascript">
 function showerror(error){
     alert(error);

@@ -11,6 +11,7 @@ import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -80,21 +81,35 @@ public class gitUtils {
      * @return 返回本次提交的版本号 
      * @throws IOException  
      */  
-    public static String commitToGitRepository(String gitRoot, List<String> files, String remark)  
-                                                                                                 throws Exception {  
+    public static String commitToGitRepository(String gitRoot, List<String> files, String remark)   {  
         if (!utils.isEmpty(gitRoot) && files != null && files.size() > 0) {  
   
             File rootDir = new File(gitRoot);  
             //初始化git仓库  
             if (new File(gitRoot + File.separator + ".git").exists() == false) {  
-                Git.init().setDirectory(rootDir).call();  
+                try {
+					Git.init().setDirectory(rootDir).call();
+				} catch (IllegalStateException | GitAPIException e) {
+					e.printStackTrace();
+				}  
             }
             //打开git仓库  
-            Git git = Git.open(rootDir);  
+            Git git = null;
+			try {
+				git = Git.open(rootDir);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}  
             //判断工作区与暂存区的文件内容是否有变更  
-            List<DiffEntry> diffEntries = git.diff()  
-                .setPathFilter(PathFilterGroup.createFromStrings(files))  
-                .setShowNameAndStatusOnly(true).call();  
+            List<DiffEntry> diffEntries = null;
+			try {
+				diffEntries = git.diff()  
+				    .setPathFilter(PathFilterGroup.createFromStrings(files))  
+				    .setShowNameAndStatusOnly(true).call();
+			} catch (GitAPIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  
             if (diffEntries == null || diffEntries.size() == 0) {  
             		System.out.println("git没变化!");
                 return "没变化!";  
@@ -122,17 +137,26 @@ public class gitUtils {
             for (String file : updateFiles) {  
                 addCmd.addFilepattern(file);  
             }  
-            addCmd.call();  
+            try {
+				addCmd.call();
+			} catch (GitAPIException e) {
+				e.printStackTrace();
+			}  
             //2、commit  
             CommitCommand commitCmd = git.commit();  
             for (String file : updateFiles) {  
                 commitCmd.setOnly(file);  
             }  
-            RevCommit revCommit = commitCmd.setCommitter("hanxuquan", "hanxuquan@hoolai.com")  
-                .setMessage(remark).call();  
+            RevCommit revCommit = null;
+			try {
+				revCommit = commitCmd.setCommitter("hanxuquan", "hanxuquan@hoolai.com")  
+				    .setMessage(remark).call();
+			} catch (GitAPIException e) {
+				e.printStackTrace();
+			}  
             System.out.println("commit");
-            PushCommand push = git.push().setCredentialsProvider(cp);
-            push.call();
+//            PushCommand push = git.push().setCredentialsProvider(cp);
+//            push.call();
             System.out.println("push");
             return revCommit.getName();  
         }  

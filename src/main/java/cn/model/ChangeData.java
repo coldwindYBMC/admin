@@ -19,6 +19,7 @@ public class ChangeData {
 		this.exception = exception;
 		this.isException = 1;
 	}
+	
 	public void addTitle(List<String> list) {
 		title.addAll(list);
 	}
@@ -36,6 +37,9 @@ public class ChangeData {
 		case UPDATE:
 			changeLine.state = 1;
 			title.stream().forEach(s->{
+				if(excelLine.getRecordMap().get(s) == null){
+					System.out.println("该字段为不存在："+s);
+				}
 				if("".equals(excelLine.getRecordMap().get(s).getValue())) {
 					changeLine.addChangeRecordNull();
 				}else {
@@ -115,5 +119,5 @@ public class ChangeData {
 	public void setUselessField(List<String> uselessField) {
 		this.uselessField = uselessField;
 	}
-	
+
 }

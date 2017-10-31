@@ -48,24 +48,24 @@ public class DataOperation {
 		{
 			put("t_s_droptemplate", new ArrayList<String>() {
 				{
-					add("DropId");
+					add("dropid");
 				}
 			});
 			put("t_s_activitysevengoaltemplate", new ArrayList<String>() {
 				{
-					add("Step");
-					add("Day");
+					add("step");
+					add("day");
 				}
 			});
 			put("t_s_cwautomonstertemplate", new ArrayList<String>() {
 				{
-					add("Level");
+					add("level");
 				}
 			});
 			put("t_s_cwcavemonstergrouptemplate", new ArrayList<String>() {
 				{
-					add("GroupId");
-					add("PlayerLevel");
+					add("groupId");
+					add("playerLevel");
 				}
 			});
 			put("t_s_cwbossrankingawardtemplate", new ArrayList<String>() {
@@ -95,7 +95,7 @@ public class DataOperation {
 
 		}
 	};
-	public Map<String, List<Line>> readDBData(String tableName) {
+	public Map<String, List<Line>> readDBData(String tableName) throws Exception {
 		Connection conn = connectSQL();
 		Map<String, List<Line>> lineMap = new HashMap<String, List<Line>>();
 		try {
@@ -109,6 +109,9 @@ public class DataOperation {
 					Column column1 = columnList.get(entry.getValue());
 					record.setDefaultValue(column1.getDefaultValue());
 					recordMap.put(entry.getValue().toLowerCase(), record);
+					System.out.println("pri"+pri.size());
+					pri.forEach(action1->System.out.println(action1));
+					
 					if (pri.contains(record.getFieldName())) {
 						pris.append(record.getValue());
 					}
@@ -123,8 +126,11 @@ public class DataOperation {
 				}
 				lineMap.get(pris.toString()).add(line);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			StringWriter sw = new StringWriter();
+			e1.printStackTrace(new PrintWriter(sw, true));
+			throw new Exception(sw.toString());
 		} finally {
 			closeConnection(conn);
 		}
@@ -155,6 +161,8 @@ public class DataOperation {
 					changeData.getUselessField().add(WorkbookUtil.getCellString(cell).trim().toLowerCase());
 					continue;
 				}	//列坐标，cell值->字段
+//				System.out.println(cell.getColumnIndex());
+//				System.out.println(WorkbookUtil.getCellString(cell).trim().toLowerCase());
 				fieldsMap.put(cell.getColumnIndex(), WorkbookUtil.getCellString(cell).trim().toLowerCase());
 			}
 			for (int i = startLine - 1; i < rows; i++) {
@@ -165,6 +173,9 @@ public class DataOperation {
 					Cell cell = null;
 					try {
 						cell = row.getCell(entry.getKey());//根据字段列读取 cell(对象)内容
+						if(cell != null){
+						//	System.out.println(WorkbookUtil.getCellString(cell).trim());
+						}
 					} catch (Exception ex) {
 						System.out.println("该单元格获取不到!");
 					}
@@ -187,14 +198,17 @@ public class DataOperation {
 				line.setRecordMap(recordMap);
 				line.setPri(pri);
 				line.setTableName(tableName);
+				//recordMap.keySet().forEach(action -> System.out.println(action.toString()));
 				//存储到excelData
 				if (excelData.get(pris.toString()) == null) {	
 					List<Line> lineList = new ArrayList<Line>();
 					if ("".equals(pris.toString())) {
+						System.out.println(pris.toString());
 						continue;
 					}
 					excelData.put(pris.toString(), lineList);
 				}
+				
 				excelData.get(pris.toString()).add(line);
 			}
 		} catch (Exception ex) {
@@ -305,7 +319,6 @@ public class DataOperation {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-
 			closeConnection(conn);
 		}
 		return column;

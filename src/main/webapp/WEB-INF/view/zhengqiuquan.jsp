@@ -6,7 +6,7 @@
 <title>导表选择</title>
 </head>
 <body>
-	<form action="${pageContext.request.contextPath}/excelUpdate1.do" method="post">
+	<form action="${pageContext.request.contextPath}/excelUpdate.do" method="post">
 		表名 :
 		<textarea name="excelName" cols="60" rows="10"></textarea>
 		<br>导入服务器:<label><input name="resoure" type="checkbox" value="1" />1服 </label>
