@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cn.model.ChangeData;
-import cn.model.ChangeLine;
 import cn.model.ChangeResource;
 import cn.model.Config;
 import cn.service.ExcelService;
@@ -49,6 +48,12 @@ public class ExcelController {
 	public String error(Model model, String error) {
 		model.addAttribute("datas", error);
 		return "error";
+	}
+
+	@RequestMapping("push")
+	public String push(Model model, String name) {
+		model.addAttribute("datas", name);
+		return "push";
 	}
 
 	/**
@@ -89,12 +94,10 @@ public class ExcelController {
 				List<ChangeData> changeList = new ArrayList<>();
 				System.out.println("用户名：" + username + "!数据库:" + resoure[i] + "!excel版本:" + excel);
 				changeList = excelService.converter(config, excelNames, false, changeResource);
-				String firstField = changeList.get(0).getTitle().get(0);
-				
-				 changeList.forEach(cd -> {
+
+				changeList.forEach(cd -> {
 					Collections.sort(cd.getChangeLines());
-				 });
-			
+				});
 
 				changeResource.setList(changeList);
 				list.add(changeResource);
@@ -159,7 +162,77 @@ public class ExcelController {
 		return file1;
 
 	}
+	
+	/**
+	 * @param excelName:
+	 *            表名 内容
+	 * @param resoure:
+	 *            导入的服务器
+	 * @param excel:
+	 *            excel目录库
+	 * @param userbane:
+	 *            用户名
+	 * @param delete:
+	 *            是否可删除
+	 * 
+	 */
+	@RequestMapping(value = "/excelUpdate1", method = RequestMethod.POST)
+	public synchronized String excelUpdate(Model model, String excelName, String[] resoure, String excel,
+			String username,String delete, HttpSession httpSession) {
+		ChangeResource changeResource = null;
+		// String isDelete = req.getParam("delete");
+		// 请输入用户名和表名;
+		if ("".equals(excelName) || "".equals(username) || excelName == null || username == null) {
+			return "";
+		}
+		String[] excel_arr = excelName.split("\r\n");
+		List<String> excelNames = new LinkedList<String>();
+		for (int i = 0; i < excel_arr.length; i++) {
+			excelNames.add(excel_arr[i]);
+		}
+		List<ChangeResource> list = new ArrayList<>();
+		try {
+			// 加载properties
+			properties = utils.loadProperties("dbconf.properties");
+			for (int i = 0; i < resoure.length; i++) {
+				changeResource = new ChangeResource();
+				changeResource.setResource(resoure[i] + "服");
+				config = new Config(properties, resoure[i], excel);
+				List<ChangeData> changeList = new ArrayList<>();
+				System.out.println("用户名：" + username + "!数据库:" + resoure[i] + "!excel版本:" + excel);
+				changeList = excelService.converter(config, excelNames,"1".equals(delete), changeResource);
 
+				changeList.forEach(cd -> {
+					Collections.sort(cd.getChangeLines());
+				});
+
+				changeResource.setList(changeList);
+				list.add(changeResource);
+			}
+			File f = createLogFile();
+			if (f == null) {
+				return null;
+			}
+			FileWriter fw = new FileWriter(f, true);
+
+			fw.write(writeData(username, list));
+			fw.write("\r\n");
+			System.out.println(utils.getTime() + ":" + username + ":");
+			fw.flush();
+			fw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw, true));
+			utils.writererror(config, username);
+			System.out.println(username + "插入表时失败：");
+			list.add(changeResource);
+			model.addAttribute("datas", list);
+			return "excelresult";
+		}
+		model.addAttribute("datas", list);
+		return "excelresult";
+	}
 	/**
 	 * @param excelName:
 	 *            表名 内容

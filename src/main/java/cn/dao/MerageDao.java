@@ -55,7 +55,7 @@ public class MerageDao {
 		    put("t_s_cwminimapallianceinfo", new ArrayList<String>(){{add("Zone");add("CityCoord");}});    
 		    put("t_s_npcarmyextendtemplate", new ArrayList<String>(){{add("NpcArmyExtendId");add("WorldLevel");}});    
 		    put("t_s_npcarmynumtemplate", new ArrayList<String>(){{add("NpcArmyNumId");add("WorldLevel");}});    
-		      
+		   
 		}}; 
 	
 	@SuppressWarnings("deprecation")

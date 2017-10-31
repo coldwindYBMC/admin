@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ChangeLine implements Comparable<ChangeLine> {
 	public List<ChangeRecord> changeRecords = new ArrayList<>();
-	public int state;// 0 删除 1 修改 2 插入
+	public int state;//0 删除 1 修改 2 插入
 	
 	@Override
 	public int compareTo(ChangeLine cl) {
@@ -15,57 +15,52 @@ public class ChangeLine implements Comparable<ChangeLine> {
 			return this.getChangeRecords().get(0).getValue().compareTo(cl.getChangeRecords().get(0).getValue());
 		}
 	}
+	
 
 	public static boolean isNumeric(String str) {
 		for (int i = 0; i < str.length(); i++) {
-			System.out.println(str.charAt(i));
 			if (!Character.isDigit(str.charAt(i))) {
 				return false;
 			}
 		}
 		return true;
 	}
-
+	
 	public void addChangeRecord(Record DBRecord, Record excelRecord) {
 		ChangeRecord changeRecord = new ChangeRecord();
 		changeRecord.setIsChange(1);
-		if (excelRecord == null && DBRecord == null) {
+		if(excelRecord == null && DBRecord == null) {
 			changeRecord.setOldValue("");
 			changeRecords.add(changeRecord);
 			return;
 		}
-		if (excelRecord == null) {
+		if(excelRecord == null) {
 			changeRecord.setOldValue(DBRecord.getValue());
 			changeRecords.add(changeRecord);
 			return;
 		}
-		if (DBRecord == null) {
+		if(DBRecord == null) {
 			changeRecord.setValue(excelRecord.getValue());
 			changeRecords.add(changeRecord);
 			return;
 		}
 		changeRecord.setOldValue(DBRecord.getValue());
 		changeRecord.setValue(excelRecord.getValue());
-		changeRecord.setIsChange(excelRecord.isIdent() ? 1 : 0);
+		changeRecord.setIsChange(excelRecord.isIdent()? 1:0);
 		changeRecords.add(changeRecord);
 	}
-
 	public List<ChangeRecord> getChangeRecords() {
 		return changeRecords;
 	}
-
 	public void setChangeRecords(List<ChangeRecord> changeRecords) {
 		this.changeRecords = changeRecords;
 	}
-
 	public int getState() {
 		return state;
 	}
-
 	public void setState(int state) {
 		this.state = state;
 	}
-
 	public void addChangeRecordNull() {
 		ChangeRecord changeRecord = new ChangeRecord();
 		changeRecord.setIsChange(1);
@@ -73,5 +68,5 @@ public class ChangeLine implements Comparable<ChangeLine> {
 		changeRecord.setOldValue("");
 		changeRecords.add(changeRecord);
 	}
-
+	
 }

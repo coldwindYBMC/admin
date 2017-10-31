@@ -6,20 +6,18 @@
 <html>
 <head>
 <title>导表选择</title>
-
 <script src="${pageContext.request.contextPath}/js/jquery-2.2.3.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstray.min.js"></script>
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 </head>
 <body>
-<a href="${pageContext.request.contextPath}/tuibiao.do?name=develop">更新develop数据库</a>
+<a href="http://10.0.6.228:8080/hang/gitpush">点击这里进入推表界面</a>
         <c:forEach items="${datas}" var="resource">
         导入${resource.resource}:<br>
             <c:forEach items="${resource.list}" var="table">
                    <c:if test="${table.isException == 1}" >
-                       导入${table.tableName}表失败!
-                   <a href="${pageContext.request.contextPath}/errorText.do?error=${table.exception}">显示错误内容</a>
+                       导入${table.tableName}表失败!  
+                      <a href="${pageContext.request.contextPath}/errorText.do?error=${table.exception}">显示错误内容</a><br>
                    </c:if>
                    <c:if test="${table.isException == 0}" >
                        导入${table.tableName}表成功!&nbsp插入${table.insertNum}条!&nbsp更新${table.updateNum}条!&nbsp<br>
@@ -49,7 +47,7 @@
 	                               </c:if>
 	                               <c:forEach items="${changeLine.changeRecords}" var="record">
 	                                   <c:if test="${record.isChange == 1}" >
-	                                       <td align="center" title="${record.oldValue}"><font color="red">${record.value}</font></td>
+	                                       <td align="center" title="${record.oldValue}"><font style="font-weight:bold;font-style:italic;" size="4" color="red">${record.value}</font></td>
 	                                   </c:if>
 	                                   <c:if test="${record.isChange == 0}" >
 	                                       <td align="center">${record.value}</td>
@@ -62,17 +60,10 @@
             </c:forEach>
         </c:forEach>
 </body>
-
-<input type="button" id="butn" value="显示/隐藏" onclick="toggle('div1')" />
-<center>
-<div id="div1"></div></center>
- document.write()
-</body>
-
-
 <script type="text/javascript">
 function showerror(error){
-    alert(error);
+	/*  alert("hello world") */
+ 		alert(error)
 }
 </script>
 </html>

@@ -58,8 +58,8 @@ public class Transfer {
         		//检查怪是否存在
         		for(String bossId : bossesArr){
         			if(!livingIdList.contains(bossId)){
-        				msg2.append("NodeId = "+r.values.get(nodeIDIndex)+"的怪BossId="+bossId+"不存在。");
-        				msg2.append("\r\n");
+//        				msg2.append("NodeId = "+r.values.get(nodeIDIndex)+"的怪BossId="+bossId+"不存在。");
+//        				msg2.append("\r\n");
         			}
         		}
         	}

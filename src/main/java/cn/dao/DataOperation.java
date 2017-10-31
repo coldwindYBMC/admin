@@ -35,9 +35,9 @@ import cn.utils.WorkbookUtil;
 
 public class DataOperation {
 	private Config config;
-	private Map<Integer, String> fieldsMap = new HashMap<Integer, String>(); //字段
-	public Map<String, Column> columnList = new HashMap<String, Column>();	//列信息map
-	private List<String> pri = new ArrayList<String>();			//在数据库中读取主键列表
+	private Map<Integer, String> fieldsMap = new HashMap<Integer, String>(); // 字段
+	public Map<String, Column> columnList = new HashMap<String, Column>(); // 列信息map
+	private List<String> pri = new ArrayList<String>(); // 在数据库中读取主键列表
 
 	public DataOperation(Config config) {
 		this.config = config;
@@ -64,37 +64,43 @@ public class DataOperation {
 			});
 			put("t_s_cwcavemonstergrouptemplate", new ArrayList<String>() {
 				{
-					add("groupId");
+					add("groupid");
 					add("playerLevel");
 				}
 			});
 			put("t_s_cwbossrankingawardtemplate", new ArrayList<String>() {
 				{
-					add("BossId");
-					add("RankInverval");
+					add("bossid");
+					add("rankinverval");
 				}
 			});
 			put("t_s_cwminimapallianceinfo", new ArrayList<String>() {
 				{
-					add("Zone");
-					add("CityCoord");
+					add("zone");
+					add("citycoord");
 				}
 			});
 			put("t_s_npcarmyextendtemplate", new ArrayList<String>() {
 				{
-					add("NpcArmyExtendId");
-					add("WorldLevel");
+					add("npcarmyextendid");
+					add("worldlevel");
 				}
 			});
 			put("t_s_npcarmynumtemplate", new ArrayList<String>() {
 				{
-					add("NpcArmyNumId");
-					add("WorldLevel");
+					add("npcarmynumId");
+					add("worldlevel");
+				}
+			});
+			put("t_s_equiparmytemplate", new ArrayList<String>() {
+				{
+					add("armygroupid");
 				}
 			});
 
 		}
 	};
+
 	public Map<String, List<Line>> readDBData(String tableName) throws Exception {
 		Connection conn = connectSQL();
 		Map<String, List<Line>> lineMap = new HashMap<String, List<Line>>();
@@ -109,9 +115,6 @@ public class DataOperation {
 					Column column1 = columnList.get(entry.getValue());
 					record.setDefaultValue(column1.getDefaultValue());
 					recordMap.put(entry.getValue().toLowerCase(), record);
-					System.out.println("pri"+pri.size());
-					pri.forEach(action1->System.out.println(action1));
-					
 					if (pri.contains(record.getFieldName())) {
 						pris.append(record.getValue());
 					}
@@ -126,21 +129,24 @@ public class DataOperation {
 				}
 				lineMap.get(pris.toString()).add(line);
 			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			StringWriter sw = new StringWriter();
-			e1.printStackTrace(new PrintWriter(sw, true));
+			ex.printStackTrace(new PrintWriter(sw, true));
 			throw new Exception(sw.toString());
 		} finally {
 			closeConnection(conn);
 		}
 		return lineMap;
 	}
+
 	/**
 	 * 读取excel数据
-	 * @param changeData TODO
 	 * 
-	 * */
+	 * @param changeData
+	 *            TODO
+	 * 
+	 */
 	@SuppressWarnings("deprecation")
 	public Map<String, List<Line>> readExcelData(String tableName, Workbook workbook, int startLine,
 			Map<String, List<Line>> excelData, ChangeData changeData) {
@@ -150,19 +156,17 @@ public class DataOperation {
 			// get rows
 			int rows = sheet.getPhysicalNumberOfRows();
 			Iterator<Cell> fieldCells = sheet.getRow(0).cellIterator(); // 第0行为列名，需要跟数据库表字段对应
-			List<String> DBColumn = selectTableColumn(tableName);//数据库字段名
+			List<String> DBColumn = selectTableColumn(tableName);// 数据库字段名
 			while (fieldCells.hasNext()) {
 				Cell cell = fieldCells.next();
 				if (cell.getCellTypeEnum() == CellType.BLANK) {
 					continue;
 				}
-				//数据库不包含excel表中的某一列
-				if (!DBColumn.contains(WorkbookUtil.getCellString(cell).trim().toLowerCase())) {//trim去掉字符串
+				// 数据库不包含excel表中的某一列
+				if (!DBColumn.contains(WorkbookUtil.getCellString(cell).trim().toLowerCase())) {// trim去掉字符串
 					changeData.getUselessField().add(WorkbookUtil.getCellString(cell).trim().toLowerCase());
 					continue;
-				}	//列坐标，cell值->字段
-//				System.out.println(cell.getColumnIndex());
-//				System.out.println(WorkbookUtil.getCellString(cell).trim().toLowerCase());
+				} // 列坐标，cell值->字段
 				fieldsMap.put(cell.getColumnIndex(), WorkbookUtil.getCellString(cell).trim().toLowerCase());
 			}
 			for (int i = startLine - 1; i < rows; i++) {
@@ -172,43 +176,37 @@ public class DataOperation {
 				for (Entry<Integer, String> entry : fieldsMap.entrySet()) {
 					Cell cell = null;
 					try {
-						cell = row.getCell(entry.getKey());//根据字段列读取 cell(对象)内容
-						if(cell != null){
-						//	System.out.println(WorkbookUtil.getCellString(cell).trim());
-						}
+						cell = row.getCell(entry.getKey());// 根据字段列读取 cell(对象)内容
 					} catch (Exception ex) {
 						System.out.println("该单元格获取不到!");
 					}
-					
-					Record record = new Record(entry.getValue(),	//字段
-							cell == null ? "" : WorkbookUtil.getCellString(cell).trim());//值
-					Column column1 = columnList.get(record.getFieldName());//根据字段得到Column，Column是从数据库得到的
+
+					Record record = new Record(entry.getValue(), // 字段
+							cell == null ? "" : WorkbookUtil.getCellString(cell).trim());// 值
+					Column column1 = columnList.get(record.getFieldName());// 根据字段得到Column，Column是从数据库得到的
 					if (column1 == null) {
-//						sb.append("数据库字段和Excel中的对不上，大概率是大小写对不上!");
+						// sb.append("数据库字段和Excel中的对不上，大概率是大小写对不上!");
 						System.out.println("数据库字段和Excel中的对不上，大概率是大小写对不上!");
 					}
 					record.setDefaultValue(column1.getDefaultValue());
 					recordMap.put(record.getFieldName().toLowerCase(), record);
-					if (pri.contains(entry.getValue())) {	//是主键
+					if (pri.contains(entry.getValue())) { // 是主键
 						pris.append(record.getValue());
 					}
 				}
-				
+
 				Line line = new Line();
 				line.setRecordMap(recordMap);
 				line.setPri(pri);
 				line.setTableName(tableName);
-				//recordMap.keySet().forEach(action -> System.out.println(action.toString()));
-				//存储到excelData
-				if (excelData.get(pris.toString()) == null) {	
+				// 存储到excelData
+				if (excelData.get(pris.toString()) == null) {
 					List<Line> lineList = new ArrayList<Line>();
 					if ("".equals(pris.toString())) {
-						System.out.println(pris.toString());
 						continue;
 					}
 					excelData.put(pris.toString(), lineList);
 				}
-				
 				excelData.get(pris.toString()).add(line);
 			}
 		} catch (Exception ex) {
@@ -319,6 +317,7 @@ public class DataOperation {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
+
 			closeConnection(conn);
 		}
 		return column;
@@ -330,18 +329,18 @@ public class DataOperation {
 		Connection conn = connectSQL();
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("desc " + tableName);	//降序
+			ResultSet rs = stmt.executeQuery("desc " + tableName); // 降序
 			// pri.clear();
 			while (rs.next()) {
 				Column column = new Column();
 				column.setType(rs.getString(2));
 				column.setIsnull(rs.getString(3));
 				column.setKey(rs.getString(4));
-				
+
 				column.setDefaultValue(rs.getString(5));
-				column.setExtra(rs.getString(6));	
-				if ("PRI".equals(rs.getString(4))) {	
-					pri.add(rs.getString(1).toLowerCase());		//设置主键
+				column.setExtra(rs.getString(6));
+				if ("PRI".equals(rs.getString(4))) {
+					pri.add(rs.getString(1).toLowerCase()); // 设置主键
 				}
 				columnList.put(rs.getString(1).toLowerCase(), column);// 字段名，列号
 			}
@@ -503,7 +502,7 @@ public class DataOperation {
 	 * 
 	 * @param connection
 	 */
-	public void closeConnection(Connection connection) {
+	public static void closeConnection(Connection connection) {
 		// 关闭连接
 		try {
 			connection.close();
@@ -697,7 +696,7 @@ public class DataOperation {
 		try {
 			// get rows
 			Map<Integer, String> fieldsMap = new HashMap<Integer, String>();
-			List<String> DBColumn = selectTableColumn(tableName);	//数据库列名
+			List<String> DBColumn = selectTableColumn(tableName); // 数据库列名
 			List<String> column = list.get(0);
 			for (int i = 0; i < column.size(); i++) {
 				if (DBColumn.contains(column.get(i).toLowerCase())) {

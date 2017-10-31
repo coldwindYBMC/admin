@@ -10,9 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
 
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +41,7 @@ public class ExcelService {
 	 * @param excelNames 表名 内容
 	 **/
 
-	public List<ChangeData> converter(Config config, List<String> excelNames, boolean bool,ChangeResource changeResource) {
+	public List<ChangeData> converter(Config config, List<String> excelNames, boolean bool,ChangeResource changeResource ) {
 		try {
 			if (!utils.svnup(config)) {
 				List<ChangeData> listData = new ArrayList<>();
@@ -53,20 +51,20 @@ public class ExcelService {
 		} catch (IOException e) {
 			System.out.println("svn更新报错！");
 		}
-		return start(config, excelNames, bool, changeResource);
+		return start(config, excelNames, bool, changeResource );
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ChangeData> start(Config config, Object excels, boolean bool,ChangeResource changeResource) {
+	public List<ChangeData> start(Config config, Object excels, boolean bool,ChangeResource changeResource ) {
 		this.isDelete = bool;
 		List<String> excel = (List<String>) excels;
-		return importExcelToSQL(config, excel,changeResource);
+		return importExcelToSQL(config, excel, changeResource );
 	}
 
 	/**
 	 * @param excels 表名 内容
 	 **/
-	private List<ChangeData> importExcelToSQL(Config config, List<String> excels,ChangeResource changeResource) {
+	private List<ChangeData> importExcelToSQL(Config config, List<String> excels,ChangeResource changeResource ) {
 		DataOperation dataOperation = new DataOperation(config);
 		List<ChangeData> listData = new ArrayList<>();
 		for (String lineStr : excels) {
@@ -77,7 +75,7 @@ public class ExcelService {
 			String excelName = lineStr.split(":")[0];
 
 			String tableName = "";
-			if (excelName.indexOf("t_s_droptemplate") != -1) {
+			if (excelName.indexOf("t_s_droptemplate") != -1 || excelName.indexOf("t_s_droptemplate2") != -1|| excelName.indexOf("t_s_droptemplate3") != -1){
 				tableName = "t_s_droptemplate";
 			} else {
 				tableName = excelName;
@@ -87,8 +85,8 @@ public class ExcelService {
 				List<Object> workbookList = new ArrayList<Object>();
 				workbookList.add(workbook);
 				if (DataOperation.map.containsKey(tableName)) {
-					excelUpdateDBNoKey(dataOperation, row, tableName, workbookList, 
-							WorkbookUtil.findSuffix(config.excelDirectoty, excelName));//后缀
+					listData.add(excelUpdateDBNoKey(dataOperation, row, tableName, workbookList, 
+							WorkbookUtil.findSuffix(config.excelDirectoty, excelName)));//后缀
 				} else {
 					listData.add(excelUpdateDB(dataOperation, row, tableName, workbookList,
 							WorkbookUtil.findSuffix(config.excelDirectoty, excelName)));
@@ -115,11 +113,13 @@ public class ExcelService {
 	 * @param suffix 后缀名字
 	 * */
 	@SuppressWarnings("unchecked")
-	private int excelUpdateDBNoKey(DataOperation dataOperation, int startLine, String Name, List<Object> workbookList,
+	private ChangeData excelUpdateDBNoKey(DataOperation dataOperation, int startLine, String Name, List<Object> workbookList,
 			 Suffix suffix) throws Exception {
 		ChangeData changeData = new ChangeData();
+		changeData.setTableName(Name);
 		
 		String tableName = Name.split("@")[0];		//
+		changeData.addTitle(dataOperation.selectTableColumn(tableName));
 		List<Line> diffLine = new ArrayList<Line>();
 		Map<String, List<Line>> excelData = new HashMap<String, List<Line>>();
 		dataOperation.selectTablePri(tableName);
@@ -128,8 +128,8 @@ public class ExcelService {
 				dataOperation.readCsvData(tableName, (List<List<String>>) workbookList.get(i), startLine, excelData);
 				System.out.println("获取到Csv数据");
 			} else {
-				dataOperation.readExcelData(tableName, (Workbook) workbookList.get(i), startLine, excelData, changeData);
-			}
+				dataOperation.readExcelData(tableName, (Workbook) workbookList.get(i), startLine, excelData,changeData);
+			}  
 		}
 		Map<String, List<Line>> DBData = dataOperation.readDBData(tableName);
 		if (this.isDelete) {
@@ -139,12 +139,10 @@ public class ExcelService {
 					diffLine.add(entry.getValue().get(0));
 					entry.getValue().stream().forEach(line->changeData.addChangeLine(line, null, Ident.DELECT));
 				}
-			}
+			} 
 		}
-		System.out.println("excelData.entrySet().size():"+excelData.entrySet().size());
 		for (Entry<String, List<Line>> entry : excelData.entrySet()) {
 			if (!DBData.containsKey(entry.getKey())) {
-				System.out.println(entry.getValue().size());
 				if ("".equals(entry.getKey())) {
 					continue;
 				}
@@ -154,7 +152,6 @@ public class ExcelService {
 					changeData.addChangeLine(null, entry.getValue().get(i), Ident.INSERT);
 				}
 			} else {
-				System.out.println(entry.getValue().size());
 				for (int i = 0; i < entry.getValue().size(); i++) {
 					if (!entry.getValue().get(i).equalList(DBData.get(entry.getKey()))) {
 						Line line = entry.getValue().get(i).clon();
@@ -172,12 +169,10 @@ public class ExcelService {
 			}
 		}
 		List<String> sqlList = generateSql(diffLine);
-		System.out.println(sqlList.size());
-		sqlList.forEach(a -> System.out.println(a));
 		// 执行插入语句
 		int m = dataOperation.excute(sqlList);
 		System.out.println("import " + tableName + " success");
-		return m;
+		return changeData;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -235,29 +230,17 @@ public class ExcelService {
 			}
 		}
 		for (Entry<String, List<Line>> entry : excelData.entrySet()) {
-			
-			
-			for(String str :entry.getValue().get(0).getRecordMap().keySet()){
-				if(str.equals("templateid")){
-					System.out.println(entry.getValue().get(0).getRecordMap().get(str).getValue());
-					System.out.println(entry.getValue().get(0).getRecordMap().get(str).getFieldName());
-				}
-			}
-	
 			if (!DBData.containsKey(entry.getKey())) {	//数据库表数据字段不包含 excel字段
 				if ("".equals(entry.getKey())) {
 					continue;
 				}
-			
 				entry.getValue().get(0).setIdent(Ident.INSERT); //设置插入标记
 				diffLine.add(entry.getValue().get(0));
 				changeData.addChangeLine(null, entry.getValue().get(0), Ident.INSERT);
 			} else {
-				System.out.println("key:"+entry.getValue().get(0));
 				if (!entry.getValue().get(0).equalList(DBData.get(entry.getKey()))) { //值不相等，更新标识
 					entry.getValue().get(0).setIdent(Ident.UPDATE);
 					diffLine.add(entry.getValue().get(0));
-					System.out.println(entry.getValue().get(0).toString());
 					changeData.addChangeLine(DBData.get(entry.getKey()).get(0), entry.getValue().get(0), Ident.UPDATE);
 				}
 			}

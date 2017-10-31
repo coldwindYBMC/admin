@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	${datas}
+<a href="http://10.0.6.228:8080/hang/gitpush">点击这里进入推表界面</a>
 </body>
 </html>
