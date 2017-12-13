@@ -125,7 +125,6 @@ public class utils {
 		for(int i=1;i<=s.length()/2;i++){
 			StringBuffer sb=new StringBuffer();
 			s=Stringzip1(sb,s,i).toString();
-			System.out.println("��"+i+"��ѹ����"+s);
 		}
 		return s;
 		

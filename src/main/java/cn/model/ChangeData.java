@@ -3,6 +3,8 @@ package cn.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.service.ExcelService;
+
 public class ChangeData {
 	public String tableName;
 	public List<String> title = new ArrayList<>();
@@ -13,6 +15,28 @@ public class ChangeData {
 	private int updateNum = 0;
 	public String exception = "";
 	public int isException = 0;
+	public int isExistsSecondLine;//第二行是否是注释
+	private  int importRowLine;//开始导入的行数
+	private  int existLine;//有几行未导入
+
+	public int getIsExistsSecondLine() {
+		return isExistsSecondLine;
+	}
+	public void setIsExistsSecondLine(int isExistsSecondLine) {
+		this.isExistsSecondLine = isExistsSecondLine;
+	}
+	public int getImportRowLine() {
+		return importRowLine;
+	}
+	public void setImportRowLine(int importRowLine) {
+		this.importRowLine = importRowLine;
+	}
+	public int getExistLine() {
+		return existLine;
+	}
+	public void setExistLine(int existLine) {
+		this.existLine = existLine;
+	}
 	public ChangeData() {}
 	public ChangeData(String tableName, String exception) {
 		this.tableName = tableName;
@@ -38,10 +62,16 @@ public class ChangeData {
 			title.stream().forEach(s->{
 				if(excelLine.getRecordMap().get(s) == null){
 					System.out.println("该字段为空："+s);
-				}
-				if("".equals(excelLine.getRecordMap().get(s).getValue())) {
+					ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
+					System.out.println(ExcelService.isExceptionString);
+				} 
+				if("".equals(excelLine.getRecordMap().get(s).getValue()) && DBLine.getRecordMap().get(s).getValue() == null ) {
 					changeLine.addChangeRecordNull();
-				}else {
+				} else if("".equals(excelLine.getRecordMap().get(s).getValue()) && (DBLine.getRecordMap().get(s).getValue() != null
+									&& "".equals(DBLine.getRecordMap().get(s).getValue()))){
+					changeLine.addChangeRecordNull(DBLine.getRecordMap().get(s));//如果数据库为不为NULL或者不会为""且excel为""
+				}
+				else {
 					changeLine.addChangeRecord(DBLine.getRecordMap().get(s), excelLine.getRecordMap().get(s));
 				}
 			});
@@ -53,6 +83,8 @@ public class ChangeData {
 			title.stream().forEach(s->{
 				if(excelLine.getRecordMap().get(s) == null){
 					System.out.println("该字段为空："+s);
+					ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
+					System.out.println(ExcelService.isExceptionString);
 				}
 				if("".equals(excelLine.getRecordMap().get(s).getValue())) {
 					changeLine.addChangeRecordNull();

@@ -35,7 +35,7 @@ public class ChangeLine implements Comparable<ChangeLine> {
 			return;
 		}
 		if(excelRecord == null) {
-			changeRecord.setOldValue(DBRecord.getValue());
+			changeRecord.setValue(DBRecord.getValue());
 			changeRecords.add(changeRecord);
 			return;
 		}
@@ -67,6 +67,15 @@ public class ChangeLine implements Comparable<ChangeLine> {
 		changeRecord.setValue("");
 		changeRecord.setOldValue("");
 		changeRecords.add(changeRecord);
+	}
+
+	public void addChangeRecordNull(Record DBrecord) {
+		ChangeRecord changeRecord = new ChangeRecord();
+		changeRecord.setIsChange(1);
+		changeRecord.setValue("Change to Null value");
+		changeRecord.setOldValue(DBrecord.getValue());
+		changeRecords.add(changeRecord);
+		
 	}
 	
 }

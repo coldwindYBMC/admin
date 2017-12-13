@@ -7,7 +7,7 @@
 <title>导表选择</title>
 </head>
 <body>
-${value }
+${excel }
 </body>
 <script type="text/javascript">
 </script>

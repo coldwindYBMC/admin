@@ -10,25 +10,13 @@
 		表名 :
 		<textarea name="excelName" cols="60" rows="10"></textarea>
 		<br>导入服务器:<label><input name="resoure" type="checkbox" value="1" />1服 </label>
-		<label><input name="resoure" type="checkbox" value="2" />2服</label>
-		<label><input name="resoure" type="checkbox" value="3" />3服 </label>
-		<label><input name="resoure" type="checkbox" value="4" />4服</label>
-		<label><input name="resoure" type="checkbox" value="5" />5服</label>
-		<label><input name="resoure" type="checkbox" value="8" />gve服(8服)</label>
-		<label><input name="resoure" type="checkbox" value="9" />V1.7.0服</label>
-		<label><input name="resoure" type="checkbox" value="11" />V1.6.0服</label>
-		<label><input name="resoure" type="checkbox" value="12" />coliseume</label>
-		<label><input name="resoure" type="checkbox" value="13" />os_s_1.5.4</label>
-		<label><input name="resoure" type="checkbox" value="14" />os_t_1.5.4</label>
+		<label><input name="resoure" type="checkbox" value="10" />text</label>
+
 		
 		<br>excel目录库:<label><input name="excel" type="radio" checked="checked" value="1" />2.0.0 </label>
-		<label><input name="excel" type="radio" value="2" />develop </label>
-		<label><input name="excel" type="radio" value="3" />gve </label> 
-		<label><input name="excel" type="radio" value="5" />newmap</label>
-		<label><input name="excel" type="radio" value="8" />cross_arena</label>
-		<label><input name="excel" type="radio" value="10" />cross_battle</label>
-		<label><input name="excel" type="radio" value="9" />os_s_1.5.4 </label> 
-		<label><input name="excel" type="radio" value="11" />os_t_1.5.4 </label> 
+		<label><input name="excel" type="radio" value="6" />text</label>
+
+		
 		<!-- <br>数据是否可删除<input name="delete" type="radio" value="1" />是</label>
 		<label><input name="delete" checked="checked" type="radio" value="0" />否</label> -->
 		<br>用户名 :<input type="text" name="username" value=""><br>

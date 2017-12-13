@@ -19,6 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import cn.ExcelUtil;
+import cn.dao.DataOperation;
 import cn.model.ChangeData;
 import cn.model.ChangeResource;
 import cn.model.Config;
@@ -38,7 +40,12 @@ public class ExcelController {
 	public String list(Model model) {
 		return "excelselect";
 	}
-
+	
+	@RequestMapping("/text")
+	public String list3(Model model) {
+		return "text";
+	}
+	
 	@RequestMapping("/zhengqiuquan")
 	public String list2(Model model) {
 		return "zhengqiuquan";
@@ -87,6 +94,7 @@ public class ExcelController {
 		try {
 			// 加载properties
 			properties = utils.loadProperties("dbconf.properties");
+			//服
 			for (int i = 0; i < resoure.length; i++) {
 				changeResource = new ChangeResource();
 				changeResource.setResource(resoure[i] + "服");
@@ -94,9 +102,11 @@ public class ExcelController {
 				List<ChangeData> changeList = new ArrayList<>();
 				System.out.println("用户名：" + username + "!数据库:" + resoure[i] + "!excel版本:" + excel);
 				changeList = excelService.converter(config, excelNames, false, changeResource);
-
+				
 				changeList.forEach(cd -> {
-					Collections.sort(cd.getChangeLines());
+					if(!cd.getTableName().contains("t_s_midao")){//密道不排序展示
+						Collections.sort(cd.getChangeLines());
+					}
 				});
 
 				changeResource.setList(changeList);
@@ -106,6 +116,7 @@ public class ExcelController {
 			if (f == null) {
 				return null;
 			}
+			//ExcelUtil.writeTxtFile(DataOperation.fileLine.toString(), f1);
 			FileWriter fw = new FileWriter(f, true);
 
 			fw.write(writeData(username, list));
@@ -309,7 +320,7 @@ public class ExcelController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "excelresult";
+		return "result";
 	}
 
 	@RequestMapping("/tuibiao")

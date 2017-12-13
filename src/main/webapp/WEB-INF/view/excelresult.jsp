@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 </head>
 <body>
-<a href="http://10.0.6.228:8080/hang/gitpush">点击这里进入推表界面</a>
+<a href="http://10.0.6.228:8081/hang/gitpush">推表界面</a>
         <c:forEach items="${datas}" var="resource">
         导入${resource.resource}:<br>
             <c:forEach items="${resource.list}" var="table">
@@ -20,7 +20,16 @@
                       <a href="${pageContext.request.contextPath}/errorText.do?error=${table.exception}">显示错误内容</a><br>
                    </c:if>
                    <c:if test="${table.isException == 0}" >
-                       导入${table.tableName}表成功!&nbsp插入${table.insertNum}条!&nbsp更新${table.updateNum}条!&nbsp<br>
+                       导入${table.tableName}表成功!&nbsp插入${table.insertNum}条!&nbsp更新${table.updateNum}条!&nbsp
+                       <br>
+                        <c:if test = "${table.importRowLine > 2}" >    
+                       		 <c:if test = "${table.importRowLine == 3 && table.isExistsSecondLine == 1}" >  
+                       		  <font color="red">您是从第* ${table.importRowLine} *行开始导入数据，前* ${table.importRowLine-1} *行数据中有 * ${table.existLine} *行符合条件的数据未导入，请确认数据是否不导入！</font>
+                        	 </c:if>    
+                        	 <c:if test = "${table.importRowLine > 3 }" >  
+                        	`<font color="red">您是从第* ${table.importRowLine} *行开始导入数据，前* ${table.importRowLine-1} *行数据中有 * ${table.existLine} *行符合条件的数据未导入，请确认数据是否不导入！</font>
+                      		</c:if>   
+                       	</c:if>              
                    </c:if>
                    <c:if test="${table.isException == 0}" >
 	                   <c:forEach items="${table.uselessField}" var="uselessField">

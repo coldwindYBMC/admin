@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,11 +22,20 @@ import cn.model.Line;
 import cn.model.Suffix;
 import cn.utils.WorkbookUtil;
 import cn.utils.utils;
-
 @Service
 public class ExcelService {
-
+	
+	public static StringBuffer isExceptionString = new StringBuffer();
+	
 	private boolean isDelete;
+
+//	public String getIsExceptionString() {
+//		return isExceptionString;
+//	}
+
+//	public void setIsExceptionString(String isExceptionString) {
+//		this.isExceptionString = isExceptionString;
+//	}
 
 	public boolean isDelete() {
 		return isDelete;
@@ -68,13 +76,15 @@ public class ExcelService {
 		DataOperation dataOperation = new DataOperation(config);
 		List<ChangeData> listData = new ArrayList<>();
 		for (String lineStr : excels) {
-			int row = 2;
+			int row = 3;
 			if (lineStr.split(":").length > 1) {
 				row = Integer.valueOf(lineStr.split(":")[1]);
 			}
+			
 			String excelName = lineStr.split(":")[0];
 
 			String tableName = "";
+			
 			if (excelName.indexOf("t_s_droptemplate") != -1 || excelName.indexOf("t_s_droptemplate2") != -1|| excelName.indexOf("t_s_droptemplate3") != -1){
 				tableName = "t_s_droptemplate";
 			} else {
@@ -95,9 +105,21 @@ public class ExcelService {
 				e.printStackTrace();
 				StringWriter sw = new StringWriter();
 				e.printStackTrace(new PrintWriter(sw, true));
-				String s = sw.toString().substring(0, 2000);
-				listData.add(new ChangeData(tableName, s));
+				String s = null;
+				if(sw.toString().length()<=2000){
+					s = sw.toString().substring(0,sw.toString().length()-1);
+				} else{
+					s = sw.toString().substring(0,2000);
+				}
+				if(s.contains("#REF")){
+					int i = s.indexOf("for");
+					int j = s.indexOf("at", s.indexOf("row"));
+					isExceptionString.append("表存在  REF 单元格：").append(s.substring(i, j));
+				}
+				isExceptionString.append("<br>").append(s);
+				listData.add(new ChangeData(tableName, isExceptionString.toString()));
 				changeResource.setList(listData);
+				isExceptionString.setLength(0);
 			} finally {
 				WorkbookUtil.close();
 			}
@@ -137,7 +159,9 @@ public class ExcelService {
 				if (!excelData.containsKey(entry.getKey())) {
 					entry.getValue().get(0).setIdent(Ident.DELECT);
 					diffLine.add(entry.getValue().get(0));
-					entry.getValue().stream().forEach(line->changeData.addChangeLine(line, null, Ident.DELECT));
+					entry.getValue().stream().forEach(line->{
+						changeData.addChangeLine(line, null, Ident.DELECT);
+					});
 				}
 			} 
 		}
@@ -157,7 +181,8 @@ public class ExcelService {
 						Line line = entry.getValue().get(i).clon();
 						line.setIdent(Ident.DELECT);
 						diffLine.add(line);
-						entry.getValue().stream().forEach(line1->changeData.addChangeLine(line1, null, Ident.DELECT));
+						DBData.get(entry.getKey()).stream().forEach(line1->changeData.addChangeLine(line1, null, Ident.DELECT));
+						//entry.getValue().stream().forEach(line1->changeData.addChangeLine(line1, null, Ident.DELECT));
 						for (int j = 0; j < entry.getValue().size(); j++) {
 							entry.getValue().get(j).setIdent(Ident.INSERT);
 							diffLine.add(entry.getValue().get(j));
@@ -225,6 +250,7 @@ public class ExcelService {
 				if (!excelData.containsKey(entry.getKey())) {	//excel表数据字段不包含 数据库字段
 					entry.getValue().get(0).setIdent(Ident.DELECT);//设置 删除标记
 					diffLine.add(entry.getValue().get(0));	//记录数据库信息的值
+					System.out.println("delete******");
 					changeData.addChangeLine(entry.getValue().get(0), null, Ident.DELECT);
 				}
 			}
@@ -234,6 +260,7 @@ public class ExcelService {
 				if ("".equals(entry.getKey())) {
 					continue;
 				}
+				System.out.println("insert******");
 				entry.getValue().get(0).setIdent(Ident.INSERT); //设置插入标记
 				diffLine.add(entry.getValue().get(0));
 				changeData.addChangeLine(null, entry.getValue().get(0), Ident.INSERT);
@@ -249,6 +276,7 @@ public class ExcelService {
 		return diffLine;
 	}
 
+	@SuppressWarnings("unused")
 	private static List<String> generateSql1(List<Line> diffLine) {
 		List<String> sqlList = new LinkedList<String>();
 		for (int i = 0; i < diffLine.size(); i++) {
@@ -257,7 +285,7 @@ public class ExcelService {
 		return sqlList;
 	}
 
-	/**
+	/** 
 	 * 生成sql语句
 	 * */
 	private static List<String> generateSql(List<Line> diffLine) {

@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import cn.ExcelUtil;
 import cn.model.ChangeData;
 import cn.model.Column;
 import cn.model.Config;
@@ -34,6 +35,7 @@ import cn.model.Record;
 import cn.utils.WorkbookUtil;
 
 public class DataOperation {
+	//public static StringBuffer fileLine = new StringBuffer();
 	private Config config;
 	private Map<Integer, String> fieldsMap = new HashMap<Integer, String>(); // 字段
 	public Map<String, Column> columnList = new HashMap<String, Column>(); // 列信息map
@@ -97,7 +99,11 @@ public class DataOperation {
 					add("armygroupid");
 				}
 			});
-
+			put("t_s_midao", new ArrayList<String>() {
+				{
+					add("mapid");
+				}
+			});
 		}
 	};
 
@@ -116,7 +122,7 @@ public class DataOperation {
 					record.setDefaultValue(column1.getDefaultValue());
 					recordMap.put(entry.getValue().toLowerCase(), record);
 					if (pri.contains(record.getFieldName())) {
-						pris.append(record.getValue());
+						pris.append(record.getValue());//主鍵
 					}
 				}
 				Line line = new Line();
@@ -144,7 +150,7 @@ public class DataOperation {
 	 * 读取excel数据
 	 * 
 	 * @param changeData
-	 *            TODO
+	 *            
 	 * 
 	 */
 	@SuppressWarnings("deprecation")
@@ -153,6 +159,22 @@ public class DataOperation {
 		try {
 			fieldsMap.clear();
 			Sheet sheet = workbook.getSheetAt(0);
+			//第二行不是注释
+			if(startLine > 2 && !ExcelUtil.existsSecondline(sheet)){
+			//	fileLine.append(tableName).append("\n");
+				System.out.println("第二行可能存在数据");
+				
+				changeData.setIsExistsSecondLine(1);
+			}
+			if(startLine > 2){
+				changeData.setImportRowLine(startLine);
+				System.out.println(startLine);
+				if(changeData.getIsExistsSecondLine() == 1){
+					changeData.setExistLine(startLine - 2);
+				} else{
+					changeData.setExistLine(startLine - 3);
+				}
+			}
 			// get rows
 			int rows = sheet.getPhysicalNumberOfRows();
 			Iterator<Cell> fieldCells = sheet.getRow(0).cellIterator(); // 第0行为列名，需要跟数据库表字段对应
@@ -179,8 +201,11 @@ public class DataOperation {
 						cell = row.getCell(entry.getKey());// 根据字段列读取 cell(对象)内容
 					} catch (Exception ex) {
 						System.out.println("该单元格获取不到!");
-					}
-
+					}	
+					//这里调试了一个表，显示字段和名字
+//					if(entry.getValue().equals("blessingvaluemax") ){
+//						System.out.println("field:"+entry.getValue()+"***value:"+WorkbookUtil.getCellString(cell).trim());
+//					}
 					Record record = new Record(entry.getValue(), // 字段
 							cell == null ? "" : WorkbookUtil.getCellString(cell).trim());// 值
 					Column column1 = columnList.get(record.getFieldName());// 根据字段得到Column，Column是从数据库得到的

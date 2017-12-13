@@ -91,10 +91,15 @@ public class Record {
 		this.extra = extra;
 	}
 	public boolean equal(Record record){
-		
-		
 		if(this.fieldName.equals(record.fieldName)&&this.value.equals(record.value)){	
 			return true;
+		}
+		//调整Null报错空指针异常
+		if(this.defaultValue == null){
+			setDefaultValue("");
+		}
+		if(record.value == null){
+			record.value = "";
 		}
 		if(this.fieldName.equals(record.fieldName)&&"".equals(this.value)&&(this.defaultValue==record.value||record.value.equals(this.defaultValue))){
 			return true;
