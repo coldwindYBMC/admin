@@ -77,5 +77,15 @@ public class ChangeLine implements Comparable<ChangeLine> {
 		changeRecords.add(changeRecord);
 		
 	}
+
+
+	public void addChangeRecord(String string, String string2) {
+		ChangeRecord changeRecord = new ChangeRecord();
+		changeRecord.setIsChange(1);
+		changeRecord.setValue("");
+		changeRecord.setOldValue("");
+		changeRecords.add(changeRecord);
+		
+	}
 	
 }

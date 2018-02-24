@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 </head>
 <body>
-<a href="http://10.0.6.228:8081/hang/gitpush">推表界面</a>
+<a href="http://10.0.2.14:8081/hang/gitpush">推表界面</a>
         <c:forEach items="${datas}" var="resource">
         导入${resource.resource}:<br>
             <c:forEach items="${resource.list}" var="table">

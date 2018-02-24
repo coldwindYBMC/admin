@@ -104,6 +104,11 @@ public class DataOperation {
 					add("mapid");
 				}
 			});
+			put("t_s_gvg_alliance_birthpoint", new ArrayList<String>() {
+				{
+					add("mapid");
+				}
+			});
 		}
 	};
 
@@ -122,7 +127,7 @@ public class DataOperation {
 					record.setDefaultValue(column1.getDefaultValue());
 					recordMap.put(entry.getValue().toLowerCase(), record);
 					if (pri.contains(record.getFieldName())) {
-						pris.append(record.getValue());//主鍵
+						pris.append(record.getValue()).append("_");//主鍵,-链接
 					}
 				}
 				Line line = new Line();
@@ -161,7 +166,7 @@ public class DataOperation {
 			Sheet sheet = workbook.getSheetAt(0);
 			//第二行不是注释
 			if(startLine > 2 && !ExcelUtil.existsSecondline(sheet)){
-			//	fileLine.append(tableName).append("\n");
+				//fileLine.append(tableName).append("\n");
 				System.out.println("第二行可能存在数据");
 				
 				changeData.setIsExistsSecondLine(1);
@@ -199,8 +204,11 @@ public class DataOperation {
 					Cell cell = null;
 					try {
 						cell = row.getCell(entry.getKey());// 根据字段列读取 cell(对象)内容
+//						if((cell == null || WorkbookUtil.getCellString(cell).equals(""))&& pri.contains(entry.getValue())){//主键为空，或者Null
+//							break;
+//						}
 					} catch (Exception ex) {
-						System.out.println("该单元格获取不到!");
+//						System.out.println("该单元格获取不到!");
 					}	
 					//这里调试了一个表，显示字段和名字
 //					if(entry.getValue().equals("blessingvaluemax") ){
@@ -215,8 +223,11 @@ public class DataOperation {
 					}
 					record.setDefaultValue(column1.getDefaultValue());
 					recordMap.put(record.getFieldName().toLowerCase(), record);
+//					if("endtime".contains(entry.getValue())){//读取特定字段的内容，测试用
+//						System.out.println(record.getValue());
+//					}
 					if (pri.contains(entry.getValue())) { // 是主键
-						pris.append(record.getValue());
+						pris.append(record.getValue()).append("_");
 					}
 				}
 
@@ -514,6 +525,7 @@ public class DataOperation {
 		}
 		Connection conn = null;
 		try {
+			
 			conn = java.sql.DriverManager.getConnection(dbName, config.db.user, config.db.pass);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -521,7 +533,26 @@ public class DataOperation {
 		}
 		return conn;
 	}
-
+	
+	public static Connection connectSQL(Config conf) {
+		String dbName = "jdbc:mysql://" + conf.db.host + ":3306" + "/" + conf.db.name
+				+ "?useUnicode=true&characterEncoding=utf-8";
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("载入MySQL数据库驱动时出错");
+		}
+		Connection conn = null;
+		try {
+			conn = java.sql.DriverManager.getConnection(dbName, conf.db.user, conf.db.pass);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("连接到MySQL数据库时出错");
+		}
+		return conn;
+	}
+	
 	/**
 	 * 关闭连接
 	 * 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,14 @@ public class ExcelController {
 	public String list(Model model) {
 		return "excelselect";
 	}
+	@RequestMapping("/excelHtmlUpdate/os")
+	public String list5(Model model) {
+		return "os";
+	}
+	@RequestMapping("/excelHtmladd")
+	public String list4(Model model) {
+		return "addexcelselect";
+	}
 	
 	@RequestMapping("/text")
 	public String list3(Model model) {
@@ -62,7 +71,23 @@ public class ExcelController {
 		model.addAttribute("datas", name);
 		return "push";
 	}
+	/*excel 11 -> resoure 14
+	 * excel 9 -> resoure 13
+	 * 检查 海外不要导乱
+	 * */
 
+	private boolean checkOSVersion(String[] resoure, String excel){
+		
+		if(excel.equals("9") && !resoure[0].equals("13")){
+			System.out.println("导入海外简体表，选择了多个resoure或者导入目标不是海外简体");
+			return false;
+		}
+		if(excel.equals("11") && !resoure[0].equals("14")){
+			System.out.println("导入海外繁体表，选择了多个resoure或者导入目标不是海外繁体");
+			return false;
+		}
+		return true;
+	}
 	/**
 	 * @param excelName:
 	 *            表名 内容
@@ -79,6 +104,9 @@ public class ExcelController {
 	@RequestMapping(value = "/excelUpdate", method = RequestMethod.POST)
 	public synchronized String excelUpdate(Model model, String excelName, String[] resoure, String excel,
 			String username) {
+		if(!checkOSVersion(resoure, excel)){//仅检查海外
+			return null;
+		}
 		ChangeResource changeResource = null;
 		// String isDelete = req.getParam("delete");
 		// 请输入用户名和表名;
@@ -116,9 +144,17 @@ public class ExcelController {
 			if (f == null) {
 				return null;
 			}
-			//ExcelUtil.writeTxtFile(DataOperation.fileLine.toString(), f1);
+//          System.out.println(DataOperation.fileLine.toString());
+//			ExcelUtil.writeTxtFile(DataOperation.fileLine.toString(), f1);
 			FileWriter fw = new FileWriter(f, true);
-
+			//打印输出出错的表
+			list.forEach(changeRes->{
+				changeRes.getList().forEach(changedata->{
+					if(	changedata.getIsException()==1){
+						System.out.println("该表导入错误："+changedata.getTableName());
+					}
+				});
+			});
 			fw.write(writeData(username, list));
 			fw.write("\r\n");
 			System.out.println(utils.getTime() + ":" + username + ":");
@@ -346,4 +382,5 @@ public class ExcelController {
 		model.addAttribute("value", s);
 		return "result";
 	}
+	
 }

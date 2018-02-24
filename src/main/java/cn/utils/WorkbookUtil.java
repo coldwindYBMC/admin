@@ -22,7 +22,7 @@ import cn.model.Suffix;
 public class WorkbookUtil {
 
 	private static FileInputStream file;
-	public static Object creatWorkbook(String excelDirectoty, String excelName) {
+	public static Workbook creatWorkbook(String excelDirectoty, String excelName) {
 		if(new File(excelDirectoty, excelName + ".xls").exists()){
 			try {
 				File f = new File(excelDirectoty, excelName + ".xls");

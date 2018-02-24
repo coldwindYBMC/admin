@@ -59,39 +59,74 @@ public class ChangeData {
 			break;
 		case UPDATE:
 			changeLine.state = 1;
-			title.stream().forEach(s->{
-				if(excelLine.getRecordMap().get(s) == null){
+			for(int i = 0; i < title.size();i++){
+				String s = title.get(i);
+				if(excelLine.getRecordMap().get(s) == null){	
+					changeLine.addChangeRecord("", "");
 					System.out.println("该字段为空："+s);
-					ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
-					System.out.println(ExcelService.isExceptionString);
+				//	ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
+					continue;
 				} 
 				if("".equals(excelLine.getRecordMap().get(s).getValue()) && DBLine.getRecordMap().get(s).getValue() == null ) {
 					changeLine.addChangeRecordNull();
 				} else if("".equals(excelLine.getRecordMap().get(s).getValue()) && (DBLine.getRecordMap().get(s).getValue() != null
-									&& "".equals(DBLine.getRecordMap().get(s).getValue()))){
+									&& !"".equals(DBLine.getRecordMap().get(s).getValue()))){
 					changeLine.addChangeRecordNull(DBLine.getRecordMap().get(s));//如果数据库为不为NULL或者不会为""且excel为""
 				}
 				else {
 					changeLine.addChangeRecord(DBLine.getRecordMap().get(s), excelLine.getRecordMap().get(s));
 				}
-			});
+				
+			}
+//			title.stream().forEach(s->{
+//				if(excelLine.getRecordMap().get(s) == null){	
+//					System.out.println("该字段为空："+s);
+//					ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
+//					return;
+//				} 
+//				if("".equals(excelLine.getRecordMap().get(s).getValue()) && DBLine.getRecordMap().get(s).getValue() == null ) {
+//					changeLine.addChangeRecordNull();
+//				} else if("".equals(excelLine.getRecordMap().get(s).getValue()) && (DBLine.getRecordMap().get(s).getValue() != null
+//									&& "".equals(DBLine.getRecordMap().get(s).getValue()))){
+//					changeLine.addChangeRecordNull(DBLine.getRecordMap().get(s));//如果数据库为不为NULL或者不会为""且excel为""
+//				}
+//				else {
+//					changeLine.addChangeRecord(DBLine.getRecordMap().get(s), excelLine.getRecordMap().get(s));
+//				}
+//			});
 			changeLines.add(changeLine);
 			updateNum++;
 			break;
 		case INSERT:
 			changeLine.state = 2;
-			title.stream().forEach(s->{
+			for(int i = 0; i < title.size();i++){
+				String s = title.get(i);
 				if(excelLine.getRecordMap().get(s) == null){
 					System.out.println("该字段为空："+s);
-					ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
-					System.out.println(ExcelService.isExceptionString);
+				//	ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
+					changeLine.addChangeRecord("", "");
+//					System.out.println(ExcelService.isExceptionString);
+					continue;
 				}
 				if("".equals(excelLine.getRecordMap().get(s).getValue())) {
 					changeLine.addChangeRecordNull();
 				}else {
 					changeLine.addChangeRecord(null, excelLine.getRecordMap().get(s));
 				}
-			});
+			}
+//			title.stream().forEach(s->{
+//				if(excelLine.getRecordMap().get(s) == null){
+//					System.out.println("该字段为空："+s);
+//					ExcelService.isExceptionString.append("该字段为空：").append(s).append("*****");
+//					System.out.println(ExcelService.isExceptionString);
+//					return;
+//				}
+//				if("".equals(excelLine.getRecordMap().get(s).getValue())) {
+//					changeLine.addChangeRecordNull();
+//				}else {
+//					changeLine.addChangeRecord(null, excelLine.getRecordMap().get(s));
+//				}
+//			});
 			changeLines.add(changeLine);
 			insertNum++;
 			break;

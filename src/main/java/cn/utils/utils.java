@@ -61,7 +61,9 @@ public class utils {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        } finally {
+        	process.destroy();//關掉進程
+		}
         return isSuccess;
     }
 	public static boolean svnup(String config) throws IOException {

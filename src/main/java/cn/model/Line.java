@@ -131,6 +131,7 @@ public class Line {
 				sb.append(pri.get(i)+"`='"+recordMap.get(pri.get(i)).getValue()+"' and `");
 			}
 			sb.delete(sb.length() - 5, sb.length());
+			System.out.println(" delete cmd :" + sb.toString());
 			break;
 		default:
 			break;
@@ -196,13 +197,14 @@ public class Line {
 			sb.append("delete from "+tableName+" where `");
 			for(int i=0;i<pri.size();i++){
 				if(!recordMap.containsKey(pri.get(i))){
-					System.out.println(pri.get(i));
+					System.out.println("NOKEY DELECT:"+pri.get(i));
 					continue;
 				}
 				sb.append(pri.get(i)+"`='"+recordMap.get(pri.get(i)).getValue()+"' and `");
 			}
 			sb.delete(sb.length() - 5, sb.length());
 			sb.append("</font>");
+			
 			break;
 		default:
 			break;
